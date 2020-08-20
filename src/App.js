@@ -1,24 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
+/* eslint-disable no-undef */
+import React, { useState } from 'react';
 import './App.css';
+import MapComponent from './components/MapComponent';
+import MapSearchInput from './components/MapSearchInput/MapSearchInput';
 
 function App() {
+  const [markers, setMarkers] = useState([]);
+
+  const markersHandler = (id, coords) => {
+    const newMarkers = [...markers];
+    const changingMarkerIndex = newMarkers.findIndex(item => item.id === id);
+    newMarkers[changingMarkerIndex].position = coords;
+    setMarkers(newMarkers);
+  };
+  const dragEndHandler = (id, coords) => {
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({location: coords}, (results, status) => {
+        if (status === "OK") {
+          if (results[0]) {
+            const newMarkers = [...markers];
+            const changingMarkerIndex = newMarkers.findIndex(item => item.id === id);
+            newMarkers[changingMarkerIndex].address = results[0].formatted_address;
+            setMarkers(newMarkers);
+          } else {
+            window.alert("No results found");
+          }
+        }
+      }
+    );
+  };
+
+  const mapSearchSubmitHandler = ({ address, position }) => {
+    const newMarker = {
+      address,
+      position,
+      id: Date.now().toString(),
+    };
+    setMarkers(markers => [...markers, newMarker]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <MapComponent
+        markers={markers}
+        onPositionChanged={markersHandler}
+        onDragEnd={dragEndHandler}
+      />
+
+      <MapSearchInput onPlaceChanged={mapSearchSubmitHandler}/>
     </div>
   );
 }
