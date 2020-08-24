@@ -83,7 +83,7 @@ function MapPage() {
 
         {markers.length
           ? <PlacesList items={markers} onSortEnd={moveMarker} useDragHandle helperClass="active"/>
-          : <h3 className="map-page-title">No places</h3>}
+          : <h3 className="map-page-title">The list is empty</h3>}
       </div>
 
       <div className="map-page-right">

@@ -94,4 +94,13 @@
     border: 0;
     border-top: 1px solid #ccc;
   }
+  .map-page-places-item-handle {
+    width: 22px;
+    height: 13px;
+    margin: 0 10px 0 auto;
+  }
+  .close-icon {
+    width: 22px;
+    height: 22px;
+  }
 }
