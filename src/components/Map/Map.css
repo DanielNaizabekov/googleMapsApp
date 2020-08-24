@@ -1,0 +1,6 @@
+.container-element {
+  height: auto;
+}
+.map-element, .loading-element {
+  height: 400px;
+}

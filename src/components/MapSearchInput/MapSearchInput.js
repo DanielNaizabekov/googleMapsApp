@@ -16,9 +16,11 @@ const MapSearchInput = compose(
             input = new google.maps.places.Autocomplete(event.target);
             input.addListener('place_changed', () => {
               const getPlaceResult = input.getPlace();
+              if(!getPlaceResult?.geometry?.location) return alert('Place not found !');
+              
               const place = {
                 address: getPlaceResult.formatted_address,
-                position: {
+                coords: {
                   lat: getPlaceResult.geometry.location.lat(),
                   lng: getPlaceResult.geometry.location.lng(),
                 },
@@ -39,7 +41,7 @@ const MapSearchInput = compose(
         className="map-search-input"
         type="text"
         placeholder="Search place"
-        onClick={(event) => props.initAutocomplete(event, props.onPlaceChanged)}
+        onClick={event => props.initAutocomplete(event, props.onPlaceChanged)}
       />
     </div>
   );
